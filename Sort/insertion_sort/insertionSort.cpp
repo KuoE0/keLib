@@ -1,3 +1,14 @@
+/*=============================================================================
+#     FileName: insertionSort.cpp
+#         Desc: Insertion Sort
+#       Author: KuoE0
+#        Email: kuoe0.tw@gmail.com
+#     HomePage: http://kuoe0.ch/
+#      Version: 0.0.1
+#   LastChange: 2013-03-04 00:42:04
+#      History:
+=============================================================================*/
+
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
