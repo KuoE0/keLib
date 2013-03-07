@@ -16,28 +16,27 @@ using namespace std;
 
 void mergeSort( vector< int > &num ) {
 	// divide sequence
-	vector< int > left, right;
+	vector< int > sub[ 2 ];
 	for ( int i = 0, cur = num[ 0 ], p = 0; i < num.size(); ++i ) {
 		// if next element is decreasing, put to another part.
 		if ( num[ i ] < cur )
 			p = ++p % 2;
-		p ? left.push_back( num[ i ] ) : right.push_back( num[ i ] );
-		cur = num[ i ];
+		sub[ p ].push_back( cur = num[ i ] );
 	}
-	if ( left.empty() || right.empty() )
+	if ( sub[ 1 ].empty() )
 		return;
 	// sort sub-sequence
-	mergeSort( left );
-	mergeSort( right );
+	mergeSort( sub[ 0 ] );
+	mergeSort( sub[ 1 ] );
 	// merge
 	// i point to origin, j point to left, k point to right
 	for ( int i = 0, j = 0, k = 0; i < num.size(); ++i ) {
 		// if left is less than right or right part is end.
-		if ( ( j != left.size() && left[ j ] < right[ k ] ) || k == right.size() )
-			num[ i ] = left[ j++ ];
+		if ( ( j != sub[ 0 ].size() && sub[ 0 ][ j ] < sub[ 1 ][ k ] ) || k == sub[ 1 ].size() )
+			num[ i ] = sub[ 0 ][ j++ ];
 		// if right is less than or equal to left or left part is end.
 		else
-			num[ i ] = right[ k++ ];
+			num[ i ] = sub[ 1 ][ k++ ];
 	}
 }
 
