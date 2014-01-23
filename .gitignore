@@ -2,3 +2,4 @@ a.out
 .*.swp
 temp*
 tmp*
+.DS_Store
