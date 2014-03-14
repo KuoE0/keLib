@@ -12,10 +12,11 @@
 #include <algorithm>
 using namespace std;
 
-#define MAXN 100
-#define MAXW 1000
+#define MAXN (100 + 10)
+#define MAXW (1000 + 10)
+#define OO (int)1e9
 
-int num_item, cap_knasack;
+int num_item, cap_knapsack;
 int val[MAXN], weight[MAXN];
 int dp[MAXN][MAXW];
 
@@ -24,7 +25,7 @@ int DP(int x, int w)
 {
 	// invalid weight
 	if (w < 0) {
-		return -1e9;
+		return -OO;
 	}
 	// calculated value
 	if (dp[x][w] != -1) {
@@ -41,10 +42,10 @@ int TSPTopDown()
 	// init
 	memset_s(dp, sizeof(dp), -1, sizeof(dp));
 	// empty knapsack init
-	for (int i = 0; i <= cap_knasack; ++i) {
+	for (int i = 0; i <= cap_knapsack; ++i) {
 		dp[0][i] = 0;
 	}
-	return DP(num_item, cap_knasack);
+	return DP(num_item, cap_knapsack);
 }
 
 // bottom-up method
@@ -55,11 +56,11 @@ int TSPBottomUp()
 	for (int i = 1; i <= num_item; ++i) {
 		// copy previous result
 		memcpy(dp[i], dp[i - 1], sizeof(dp[i]));
-		for (int j = weight[i]; j <= cap_knasack; ++j) {
+		for (int j = weight[i]; j <= cap_knapsack; ++j) {
 			dp[i][j] = max(dp[i][j], dp[i - 1][j - weight[i]] + val[i]);
 		}
 	}
-	return dp[num_item][cap_knasack];
+	return dp[num_item][cap_knapsack];
 }
 
 // bottom-up method use only 1D array
@@ -69,22 +70,19 @@ int TSPBottomUp1D()
 	// init
 	memset_s(dp_1d, sizeof(dp_1d), 0, sizeof(dp_1d));
 	for (int i = 1; i <= num_item; ++i) {
-		for (int j = cap_knasack; j >= weight[i]; --j) {
+		for (int j = cap_knapsack; j >= weight[i]; --j) {
 			dp_1d[j] = max(dp_1d[j], dp_1d[j - weight[i]] + val[i]);
 		}
 	}
-	return dp_1d[cap_knasack];
+	return dp_1d[cap_knapsack];
 }
 
 int main() {
 
-	while (~scanf("%d %d", &num_item, &cap_knasack)) {
+	while (~scanf("%d %d", &num_item, &cap_knapsack)) {
 
-		int w, v;
 		for (int i = 1; i <= num_item; ++i) {
-			scanf("%d %d", &w, &v);
-			weight[i] = w;
-			val[i] = v;
+			scanf("%d %d", &weight[i], &val[i]);
 		}
 
 #ifdef TOPDOWN
