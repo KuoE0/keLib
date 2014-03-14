@@ -19,7 +19,9 @@ int num_item, cap_knasack;
 int val[MAXN], weight[MAXN];
 int dp[MAXN][MAXW];
 
-int DP(int x, int w) {
+// recursion function for top-down method
+int DP(int x, int w)
+{
 	// invalid weight
 	if (w < 0) {
 		return -1e9;
@@ -33,7 +35,9 @@ int DP(int x, int w) {
 	return dp[x][w];
 }
 
-int TSPTopDown() {
+// top-down method
+int TSPTopDown()
+{
 	// init
 	memset_s(dp, sizeof(dp), -1, sizeof(dp));
 	// empty knapsack init
@@ -43,7 +47,9 @@ int TSPTopDown() {
 	return DP(num_item, cap_knasack);
 }
 
-int TSPBottomUp() {
+// bottom-up method
+int TSPBottomUp()
+{
 	// init
 	memset_s(dp, sizeof(dp), 0, sizeof(dp));
 	for (int i = 1; i <= num_item; ++i) {
@@ -54,6 +60,20 @@ int TSPBottomUp() {
 		}
 	}
 	return dp[num_item][cap_knasack];
+}
+
+// bottom-up method use only 1D array
+int TSPBottomUp1D()
+{
+	int (&dp_1d)[MAXW] = dp[0];
+	// init
+	memset_s(dp_1d, sizeof(dp_1d), 0, sizeof(dp_1d));
+	for (int i = 1; i <= num_item; ++i) {
+		for (int j = cap_knasack; j >= weight[i]; --j) {
+			dp_1d[j] = max(dp_1d[j], dp_1d[j - weight[i]] + val[i]);
+		}
+	}
+	return dp_1d[cap_knasack];
 }
 
 int main() {
@@ -72,6 +92,9 @@ int main() {
 #endif
 #ifdef BOTTOMUP
 		printf("%d\n", TSPBottomUp());
+#endif
+#ifdef BOTTOMUP1D
+		printf("%d\n", TSPBottomUp1D());
 #endif
 	}
 	return 0;
