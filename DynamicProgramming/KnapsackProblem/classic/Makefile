@@ -20,6 +20,9 @@ test: topdown bottomup bottomup1d
 	./bottomup < knapsack.in > bottomup.out
 	./bottomup1d < knapsack.in > bottomup1d.out
 
+clean:
+	rm knapsack.in topdown bottomup bottomup1d topdown.out bottomup.out bottomup1d.out
+
 # vim:ft=make
 #
 
