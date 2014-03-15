@@ -6,13 +6,13 @@
 all: topdown bottomup bottomup1d
 
 topdown: knapsack.cpp
-	g++ -o knapsack_topdown knapsack.cpp -DTOPDOWN
+	g++ -o knapsack_topdown knapsack.cpp -DTOPDOWN -std=c++11
 
 bottomup: knapsack.cpp
-	g++ -o knapsack_bottomup knapsack.cpp -DBOTTOMUP
+	g++ -o knapsack_bottomup knapsack.cpp -DBOTTOMUP -std=c++11
 
 bottomup1d: knapsack.cpp
-	g++ -o knapsack_bottomup1d knapsack.cpp -DBOTTOMUP1D
+	g++ -o knapsack_bottomup1d knapsack.cpp -DBOTTOMUP1D -std=c++11
 
 # vim:ft=make
 #

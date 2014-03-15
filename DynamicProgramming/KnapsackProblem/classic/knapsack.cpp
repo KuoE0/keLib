@@ -40,9 +40,9 @@ int DP(int x, int w)
 int TSPTopDown()
 {
 	// init
-	memset_s(dp, sizeof(dp), -1, sizeof(dp));
+	memset(dp, -1, sizeof(dp));
 	// empty knapsack init
-	for (int i = 0; i <= cap_knapsack; ++i) {
+	for (auto i : dp[0]) {
 		dp[0][i] = 0;
 	}
 	return DP(num_item, cap_knapsack);
@@ -52,7 +52,7 @@ int TSPTopDown()
 int TSPBottomUp()
 {
 	// init
-	memset_s(dp, sizeof(dp), 0, sizeof(dp));
+	memset(dp, 0, sizeof(dp));
 	for (int i = 1; i <= num_item; ++i) {
 		// copy previous result
 		memcpy(dp[i], dp[i - 1], sizeof(dp[i]));
@@ -68,7 +68,7 @@ int TSPBottomUp1D()
 {
 	int (&dp_1d)[MAXW] = dp[0];
 	// init
-	memset_s(dp_1d, sizeof(dp_1d), 0, sizeof(dp_1d));
+	memset(dp_1d, 0, sizeof(dp_1d));
 	for (int i = 1; i <= num_item; ++i) {
 		for (int j = cap_knapsack; j >= weight[i]; --j) {
 			dp_1d[j] = max(dp_1d[j], dp_1d[j - weight[i]] + val[i]);
