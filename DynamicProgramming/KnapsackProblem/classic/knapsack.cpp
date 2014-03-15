@@ -10,15 +10,14 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
+#include <vector>
 using namespace std;
 
-#define MAXN (100 + 10)
-#define MAXW (1000 + 10)
 #define OO (int)1e9
 
 int num_item, cap_knapsack;
-int val[MAXN], weight[MAXN];
-int dp[MAXN][MAXW];
+vector<int> val, weight;
+vector< vector<int> > dp;
 
 // recursion function for top-down method
 int DP(int x, int w)
@@ -40,11 +39,9 @@ int DP(int x, int w)
 int TSPTopDown()
 {
 	// init
-	memset(dp, -1, sizeof(dp));
+	fill(dp.begin(), dp.end(), vector<int>(cap_knapsack + 1, -1));
 	// empty knapsack init
-	for (auto i : dp[0]) {
-		dp[0][i] = 0;
-	}
+	fill(dp[0].begin(), dp[0].end(), 0);
 	return DP(num_item, cap_knapsack);
 }
 
@@ -52,10 +49,10 @@ int TSPTopDown()
 int TSPBottomUp()
 {
 	// init
-	memset(dp, 0, sizeof(dp));
+	fill(begin(dp), end(dp), vector<int>(cap_knapsack + 1, 0));
 	for (int i = 1; i <= num_item; ++i) {
 		// copy previous result
-		memcpy(dp[i], dp[i - 1], sizeof(dp[i]));
+		dp[i] = dp[i - 1];
 		for (int j = weight[i]; j <= cap_knapsack; ++j) {
 			dp[i][j] = max(dp[i][j], dp[i - 1][j - weight[i]] + val[i]);
 		}
@@ -66,9 +63,9 @@ int TSPBottomUp()
 // bottom-up method use only 1D array
 int TSPBottomUp1D()
 {
-	int (&dp_1d)[MAXW] = dp[0];
+	auto dp_1d = dp[0];
 	// init
-	memset(dp_1d, 0, sizeof(dp_1d));
+	fill(begin(dp_1d), end(dp_1d), 0);
 	for (int i = 1; i <= num_item; ++i) {
 		for (int j = cap_knapsack; j >= weight[i]; --j) {
 			dp_1d[j] = max(dp_1d[j], dp_1d[j - weight[i]] + val[i]);
@@ -80,6 +77,8 @@ int TSPBottomUp1D()
 int main() {
 
 	while (~scanf("%d %d", &num_item, &cap_knapsack)) {
+		val = weight = vector<int>(num_item + 1);
+		dp = vector< vector<int> >(num_item + 1, vector<int>(cap_knapsack + 1));
 
 		for (int i = 1; i <= num_item; ++i) {
 			scanf("%d %d", &weight[i], &val[i]);
