@@ -1,0 +1,4 @@
+recursive
+morris
+*.in
+*.out
