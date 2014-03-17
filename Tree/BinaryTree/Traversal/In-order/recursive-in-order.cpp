@@ -1,5 +1,5 @@
 /*
- * recursive-in-order.cpp
+ * in-order.cpp
  * Copyright (C) 2014 KuoE0 <kuoe0.tw@gmail.com>
  *
  * Distributed under terms of the MIT license.
@@ -21,14 +21,48 @@ TreeNode* insertNode(TreeNode* now, const int val) {
 	return now;
 }
 
-void inOrderTraversal(TreeNode* now) {
-	cout << "(";
-	// travel left child first
-	if (now && now->left) inOrderTraversal(now->left);
-	if (now) cout << now->val;
-	// travel left child last
-	if (now && now->right) inOrderTraversal(now->right);
-	cout << ")";
+void recursiveInOrderTraversal(TreeNode* now) {
+	if (now) {
+		// travel left child first
+		recursiveInOrderTraversal(now->left);
+		cout << now->val << ' ';
+		// travel left child last
+		recursiveInOrderTraversal(now->right);
+	}
+}
+
+void morrisInOrderTraversal(TreeNode* now) {
+
+	TreeNode *cur = now, *tmp;
+	function<TreeNode* (TreeNode*, TreeNode*)> rightmost_self = [&] (TreeNode* now, TreeNode* target) { 
+		// right child is target or empty
+		if (now->right == target || !now->right) return now;
+		// find rightmost recursively
+		return rightmost_self(now->right, target);
+	};
+
+	while (cur) {
+		// go to leftmost node
+		if (!cur->left) {
+			cout << cur->val << ' ';
+			cur = cur->right;
+			continue;
+		}
+
+		// find the rightmost node at left child and that node is not self
+		tmp = rightmost_self(cur->left, cur);
+		
+		// remove the temporal link at right child
+		if (tmp->right == cur) {
+			tmp->right = NULL;
+			cout << cur->val << ' ';
+			cur = cur->right;
+		}
+		else {
+			tmp->right = cur;
+			cur = cur->left;
+		}
+	}
 }
 
 int main() {
@@ -39,7 +73,9 @@ int main() {
 			cin >> x;
 			root = insertNode(root, x);
 		}
-		inOrderTraversal(root);
+		recursiveInOrderTraversal(root);
+		cout << endl;
+		morrisInOrderTraversal(root);
 		cout << endl;
 	}
 
