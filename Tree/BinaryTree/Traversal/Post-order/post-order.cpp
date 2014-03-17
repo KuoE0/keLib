@@ -30,6 +30,48 @@ void recursivePostOrderTraversal(TreeNode* now) {
 }
 
 void morrisPostOrderTraversal(TreeNode* now) {
+
+	TreeNode *dummy = new TreeNode(0), *cur, *tmp;
+	function<TreeNode* (TreeNode*, TreeNode*)> rightmost_self = [&] (TreeNode* now, TreeNode* target) { 
+		// right child is target or empty
+		if (now->right == target || !now->right) return now;
+		// find rightmost recursively
+		return rightmost_self(now->right, target);
+	};
+	function<void (TreeNode*)> output_path = [&] (TreeNode* now) {
+		if (now->right) output_path(now->right);
+		// output in reversed order
+		cout << now->val << ' ';
+	};
+
+	// dummy node, make the root has no right child
+	dummy->left = now;
+	cur = dummy;
+
+	while (cur) {
+
+		// reach the leftmost node
+		if (!cur->left) {
+			cur = cur->right;
+			continue;
+		}
+
+		// find the rightmost node at left child and that node is not self
+		tmp = rightmost_self(cur->left, cur);
+
+		if (tmp->right == cur) {
+			// unlink the thread
+			tmp->right = NULL;
+			// output the value in reverse order
+			output_path(cur->left);
+			cur = cur->right;
+		}
+		else {
+			// link to self
+			tmp->right = cur;
+			cur = cur->left;
+		}
+	}
 }
 
 int main() {
